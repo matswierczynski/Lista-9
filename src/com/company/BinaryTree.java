@@ -101,15 +101,17 @@ import java.util.Stack;
         return stringBuilder;
     }
 
-     Integer computeFromPostFix(){
+     String computeFromPostFix(){
         Stack<Integer> stack = new Stack<>();
+        try{
         showInPostOrder(root,stack);
-        if(!stack.isEmpty())
-            return stack.pop();
-        else throw new EmptyStackException();
+        } catch (ArithmeticException e) {return "Dzielenie przez zero !!!!!!";}
+         if(!stack.isEmpty())
+             return stack.pop().toString();
+         else throw new EmptyStackException();
     }
 
-    /*Funkcja zbiera węzły w kolejności InOrder i prezkazuje do obliczenia funkcji computeInFix*/
+    /*Funkcja zbiera węzły w kolejności PostOrder i prekazuje do obliczenia funkcji proessOperatorsFromTree*/
     private void showInPostOrder(Node node,Stack<Integer> stack){
         if (node==null)
             return;
@@ -118,9 +120,7 @@ import java.util.Stack;
         if (node.getValue() instanceof Integer)
             stack.push((Integer)node.getValue());
         else
-            try {
-                processOperatorsFromTree((char) node.getValue(), stack);
-            } catch (ArithmeticException e) {System.out.println("Dzielenie przez zero !!!!!!");}
+        processOperatorsFromTree((char) node.getValue(), stack);
     }
 
     private void processOperatorsFromTree(char operator, Stack<Integer> stack) {

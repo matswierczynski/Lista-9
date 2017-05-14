@@ -49,11 +49,12 @@ class InfixToPostfix {
                     throw new IllegalArgumentException();
             }
             else{
-                while (!operatorStack.isEmpty() && (precedence(op)<precedence(operatorStack.peek()))) {
+                while (!operatorStack.isEmpty() && (precedence(op)<=precedence(operatorStack.peek()))) {
                     postfix.append(operatorStack.pop());
                     postfix.append(" ");
                 }
                 }
+                if (op!=')')
                 operatorStack.push(op);
             }
         }
