@@ -79,6 +79,7 @@ import java.util.Stack;
         stringBuilder.append(")");
         }
 
+        /*Funkcja dostępna publicznie do wyświetlania w kolejności InOrder*/
      StringBuilder InfixFromTree(){
         StringBuilder stringBuilder = new StringBuilder();
         showInOrder(root,stringBuilder);
@@ -95,12 +96,14 @@ import java.util.Stack;
         stringBuilder.append(" ");
     }
 
+    /*Funkcja dostępna publicznie do wyświetlania w kolejności PostOrder*/
      StringBuilder PostfixFromTree(){
         StringBuilder stringBuilder = new StringBuilder();
         showPostOrder(root,stringBuilder);
         return stringBuilder;
     }
 
+    /*Funkcja dostępna publicznie do obliczenie wartości wyrażenia zapisanego w drzewie*/
      String computeFromPostFix(){
         Stack<Integer> stack = new Stack<>();
         try{
@@ -123,6 +126,7 @@ import java.util.Stack;
         processOperatorsFromTree((char) node.getValue(), stack);
     }
 
+    /*Funkcja do przetwarzania operatorów podczas obliczania wartości wyrażenia w drzewie*/
     private void processOperatorsFromTree(char operator, Stack<Integer> stack) {
         switch (operator) {
             case '+': {
