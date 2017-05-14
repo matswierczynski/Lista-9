@@ -3,10 +3,10 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 
-public class BinaryTree {
+ class BinaryTree {
     private Node root;
     private Stack<Node> nodeStack;
-    public BinaryTree(){
+     BinaryTree(){
         root=null;
         nodeStack=new Stack<>();
     }
@@ -17,7 +17,7 @@ public class BinaryTree {
     * to pobierane są dwa węzły ze stosu. Tworzony jest węzęł drzewa, zawierający
     * napotkany operator. Pierwszy pobrany węzeł staje się jego prawym dzieckiem a drugi - lewym.
     * Na tymczasowym stosie umieszczony zostaje węzeł z operatorem  */
-    public void createTree (String postFix){
+    void createTree (String postFix){
         char[] charArray = postFix.toCharArray();
 
         for (int i = 0; i < charArray.length; i++) {
@@ -69,27 +69,98 @@ public class BinaryTree {
 
 
 /*Funkcja pokazuje węzły w kolejności InOrder - Infix z nawiasami*/
-    public void showInOrder(Node node){
+    private void showInOrder(Node node, StringBuilder stringBuilder){
         if (node==null)
             return;
-        System.out.print("(");
-        showInOrder(node.left);
-        System.out.print(node);
-        showInOrder(node.right);
-        System.out.print(")");
+        stringBuilder.append("(");
+        showInOrder(node.left, stringBuilder);
+        stringBuilder.append(node);
+        showInOrder(node.right,stringBuilder);
+        stringBuilder.append(")");
         }
 
+     StringBuilder InfixFromTree(){
+        StringBuilder stringBuilder = new StringBuilder();
+        showInOrder(root,stringBuilder);
+        return stringBuilder;
+    }
+
     /*Funkcja pokazuje węzły w kolejności PostOrder - Postfix*/
-    public void showPostOrder(Node node){
+    private void showPostOrder(Node node, StringBuilder stringBuilder){
         if (node==null)
             return;
-        showPostOrder(node.left);
-        showPostOrder(node.right);
-        System.out.print(node+" ");
+        showPostOrder(node.left,stringBuilder);
+        showPostOrder(node.right,stringBuilder);
+        stringBuilder.append(node);
+        stringBuilder.append(" ");
+    }
+
+     StringBuilder PostfixFromTree(){
+        StringBuilder stringBuilder = new StringBuilder();
+        showPostOrder(root,stringBuilder);
+        return stringBuilder;
+    }
+
+     Integer computeFromPostFix(){
+        Stack<Integer> stack = new Stack<>();
+        showInPostOrder(root,stack);
+        if(!stack.isEmpty())
+            return stack.pop();
+        else throw new EmptyStackException();
+    }
+
+    /*Funkcja zbiera węzły w kolejności InOrder i prezkazuje do obliczenia funkcji computeInFix*/
+    private void showInPostOrder(Node node,Stack<Integer> stack){
+        if (node==null)
+            return;
+        showInPostOrder(node.left,stack);
+        showInPostOrder(node.right,stack);
+        if (node.getValue() instanceof Integer)
+            stack.push((Integer)node.getValue());
+        else
+            try {
+                processOperatorsFromTree((char) node.getValue(), stack);
+            } catch (ArithmeticException e) {System.out.println("Dzielenie przez zero !!!!!!");}
+    }
+
+    private void processOperatorsFromTree(char operator, Stack<Integer> stack) {
+        switch (operator) {
+            case '+': {
+                stack.push(stack.pop() + stack.pop());
+                break;
+            }
+
+            case '-': {
+                int right = stack.pop();
+                stack.push(stack.pop() - right);
+                break;
+            }
+
+            case '/': {
+                int right = stack.pop();
+                if (right==0) throw new ArithmeticException();
+                stack.push(stack.pop() / right);
+                break;
+            }
+
+            case '*': {
+                int right = stack.pop();
+                stack.push(stack.pop() * right);
+                break;
+
+            }
+
+            case '%': {
+                int right = stack.pop();
+                stack.push(stack.pop() % right);
+                break;
+            }
+
+        }
     }
 
     /*Funkcja zwraca liczbę liści drzewa*/
-    public int leavesNr(Node node){
+     int leavesNr(Node node){
         if (node==null)
             return 0;
         else
@@ -100,7 +171,7 @@ public class BinaryTree {
     }
 
     /*Funkcja zwraca liczbę węzłów drzewa*/
-    public int nodesNr(Node node){
+    int nodesNr(Node node){
         if (node==null)
             return 0;
         else
@@ -108,7 +179,7 @@ public class BinaryTree {
     }
 
     /*Fuckja zwraca wysokośc drzewa*/
-    public int treeHeight(Node node){
+     int treeHeight(Node node){
         if (node == null) {
             return -1;
         }
@@ -124,7 +195,7 @@ public class BinaryTree {
     }
 
 
-    public Node getRoot() {
+    Node getRoot() {
         return root;
     }
 
@@ -140,23 +211,23 @@ public class BinaryTree {
             right=null;
         }
 
-        public void setLeft(Node left) {
+         void setLeft(Node left) {
             this.left = left;
         }
 
-        public void setRight(Node right) {
+         void setRight(Node right) {
             this.right = right;
         }
 
-        public Node getLeft() {
+         Node getLeft() {
             return left;
         }
 
-        public Node getRight() {
+         Node getRight() {
             return right;
         }
 
-        public T getValue() {
+         T getValue() {
             return value;
         }
 

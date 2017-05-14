@@ -8,13 +8,11 @@ public class Main {
 	String convertedToONP = infixtopostfix.convert(expr);
 	BinaryTree binaryTree = new BinaryTree();
 	binaryTree.createTree(convertedToONP);
-	System.out.println("ONP: ");
-	binaryTree.showPostOrder(binaryTree.getRoot());
-	System.out.print(" = "+infixtopostfix.computeONP(convertedToONP));
-	System.out.println("\nWyrażenie z nawiasami: ");
-	binaryTree.showInOrder(binaryTree.getRoot());
-
-	System.out.println("\nLiczba liści: "+binaryTree.leavesNr(binaryTree.getRoot()));
+	System.out.println("ONP: "+binaryTree.PostfixFromTree()+
+    " = "+binaryTree.computeFromPostFix());
+	System.out.println("Wyrażenie z nawiasami: "+binaryTree.InfixFromTree()+
+    " = "+binaryTree.computeFromPostFix());
+	System.out.println("Liczba liści: "+binaryTree.leavesNr(binaryTree.getRoot()));
 	System.out.println("Liczba węzłów: "+binaryTree.nodesNr(binaryTree.getRoot()));
 	System.out.println("Wysokość drzewa: "+binaryTree.treeHeight(binaryTree.getRoot()));
     }

@@ -3,30 +3,35 @@ import java.util.Stack;
 
 class InfixToPostfix {
     private Stack<Character> operatorStack;
-    private String postfix;
+    private StringBuilder postfix;
 
-    public String convert (String infix){
+    InfixToPostfix(){
+        operatorStack=new Stack<>();
+        postfix=new StringBuilder();
+    }
+
+     String convert (String infix){
         char [] charArray = infix.toCharArray();
-        operatorStack = new Stack<>();
-        postfix=" ";
         for(int i=0;i<charArray.length;i++) {
             if (isOperator(charArray[i])) {
                     processOperator(charArray[i]);
             }
             else{
                 if(isOperand(charArray[i])){
-                    postfix+=charArray[i];
+                    postfix.append(charArray[i]);
                     if(i+1<charArray.length && !isOperand(charArray[i+1]))
-                        postfix+=' ';
+                        postfix.append(' ');
                 }
                 else
                     System.out.println("Niepoprawna komenda");
 
             }
         }
-        while(!operatorStack.isEmpty())
-            postfix+=" "+operatorStack.pop();
-        return postfix;
+        while(!operatorStack.isEmpty()) {
+            postfix.append(" ");
+            postfix.append(operatorStack.pop());
+        }
+        return postfix.toString();
     }
 
     private void processOperator (char op){
@@ -34,22 +39,24 @@ class InfixToPostfix {
             operatorStack.push(op);
         else{
             if (op==')'){
-                while (!operatorStack.isEmpty() && operatorStack.peek()!='(')
-                    postfix+=operatorStack.pop()+" ";
+                while (!operatorStack.isEmpty() && operatorStack.peek()!='(') {
+                    postfix.append(operatorStack.pop());
+                    postfix.append(" ");
+                }
                 if (!operatorStack.isEmpty())
                     operatorStack.pop();
                 else
                     throw new IllegalArgumentException();
             }
             else{
-                while (!operatorStack.isEmpty() && (precedence(op)<precedence(operatorStack.peek()))){
-                        postfix += operatorStack.pop()+" ";
+                while (!operatorStack.isEmpty() && (precedence(op)<precedence(operatorStack.peek()))) {
+                    postfix.append(operatorStack.pop());
+                    postfix.append(" ");
+                }
                 }
                 operatorStack.push(op);
             }
         }
-
-    }
 
     public int computeONP(String chain) {
         char[] charArray = chain.toCharArray();
@@ -126,12 +133,12 @@ class InfixToPostfix {
     }
 
 
-    public static boolean isOperator(char op){
+     static boolean isOperator(char op){
         return (op == '+' || op == '-' || op =='*'
                 || op == '/' || op=='%' || op == '(' || op == ')');
     }
 
-    public static boolean isOperand(char op){
+     static boolean isOperand(char op){
         return Character.isDigit(op);
     }
 
