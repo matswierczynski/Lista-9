@@ -11,6 +11,12 @@ public class BinaryTree {
         nodeStack=new Stack<>();
     }
 
+    /*Na podstawie przekazengo wyrażenia w postaci ONP funkcja tworzy drzewo binarne.
+    * Jeśli kolejny znak jest liczbą jest tworzony węzęł o wartości tej liczby, który
+    * następnie dodawany jest do tymczasowego stosu. Jeśli znak jest operatorem
+    * to pobierane są dwa węzły ze stosu. Tworzony jest węzęł drzewa, zawierający
+    * napotkany operator. Pierwszy pobrany węzeł staje się jego prawym dzieckiem a drugi - lewym.
+    * Na tymczasowym stosie umieszczony zostaje węzeł z operatorem  */
     public void createTree (String postFix){
         char[] charArray = postFix.toCharArray();
 
@@ -30,6 +36,7 @@ public class BinaryTree {
             }
         }
 
+    /*Funkcja tworzy węzeł z operatorem oraz przyporządkowuje mu dwójkę dzieci*/
     private void processOperator(char operator) {
     Node<Character> node = new Node<>(operator);
     Node right,left;
@@ -47,6 +54,8 @@ public class BinaryTree {
     root=node;
     }
 
+
+/*Funkcja dodaje do stosu liczby o wartości co najmniej dwucyfrowej*/
     private int addDigit(int position, char[] array) {
         StringBuilder tmp = new StringBuilder(Character.toString(array[position]));
         position++;
@@ -58,19 +67,68 @@ public class BinaryTree {
         return position;
     }
 
+
+/*Funkcja pokazuje węzły w kolejności InOrder - Infix z nawiasami*/
     public void showInOrder(Node node){
         if (node==null)
             return;
+        System.out.print("(");
         showInOrder(node.left);
-        System.out.print(" "+node);
+        System.out.print(node);
         showInOrder(node.right);
+        System.out.print(")");
         }
+
+    /*Funkcja pokazuje węzły w kolejności PostOrder - Postfix*/
+    public void showPostOrder(Node node){
+        if (node==null)
+            return;
+        showPostOrder(node.left);
+        showPostOrder(node.right);
+        System.out.print(node+" ");
+    }
+
+    /*Funkcja zwraca liczbę liści drzewa*/
+    public int leavesNr(Node node){
+        if (node==null)
+            return 0;
+        else
+            if (node.getLeft()==null && node.getRight()==null)
+            return 1;
+            else
+                return leavesNr(node.left)+leavesNr(node.right);
+    }
+
+    /*Funkcja zwraca liczbę węzłów drzewa*/
+    public int nodesNr(Node node){
+        if (node==null)
+            return 0;
+        else
+            return 1+nodesNr(node.left)+nodesNr(node.right);
+    }
+
+    /*Fuckja zwraca wysokośc drzewa*/
+    public int treeHeight(Node node){
+        if (node == null) {
+            return -1;
+        }
+
+        int left = treeHeight(node.getLeft());
+        int right = treeHeight(node.getRight());
+
+        if (left > right) {
+            return left + 1;
+        } else {
+            return right + 1;
+        }
+    }
 
 
     public Node getRoot() {
         return root;
     }
 
+    /*PRywatna klasa Węzeł o atrybutach: wartość, prawe dziecko, lewe dzeicko*/
     private class Node <T>{
         private T value;
         private Node left;
